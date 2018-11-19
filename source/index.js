@@ -3,10 +3,7 @@ import plural from 'plural'
 import build from './build'
 import bind from './bind'
 import deepClone from 'lodash.clonedeep'
-import deepmerge from 'deepmerge'
-import {
-    detailedDiff, diff as _diff
-} from 'deep-object-diff'
+//import deepmerge from 'deepmerge'
 import flattenObj from 'flatten-obj'
 
 const emitter = new EventEmitter(),
@@ -60,11 +57,9 @@ class Entity {
                     ).then(
                         () => {
 
-                            bind(this, state, this.constructor.type)
-
-                            let difference = flatten(_diff(oldObject, this)),
-                                diff = detailedDiff(oldObject, this),
-                                changes = Object.keys(difference)
+                            let difference = {}
+                            bind(this, state, this.constructor.type, difference)
+                            let changes = Object.keys(difference)
 
                             resolve(
                                 Object.assign(
@@ -73,7 +68,6 @@ class Entity {
                                         oldObject,
                                         newObject: this,
                                         difference,
-                                        diff,
                                         changes,
                                         changed: !!changes.length,
                                         context: this[Entity.context],

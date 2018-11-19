@@ -1,6 +1,6 @@
 import Entity from '../index'
 import MongoDBBatch from '@oudyworks/drivers/MongoDB/Batch'
-import BuildQuery from './queryBuilder'
+import getQuery from './getQuery'
 
 class MongoDBEntity extends Entity {
     constructor() {
@@ -53,7 +53,7 @@ class MongoDBEntity extends Entity {
             $return = Promise.resolve(this)
 
         if (this.constructor[MongoDBEntity.useBind] && this.id && bind) {
-            payload = BuildQuery(bind.diff, bind.oldObject, bind.newObject)
+            payload = getQuery(bind.difference)
             if (payload.length == 0)
                 return $return
         }
